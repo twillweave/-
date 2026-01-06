@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>おみくじ（表示のみ）</title>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <style>
+    body { font-family: sans-serif; padding: 16px; }
+    button { padding: 12px 16px; font-size: 16px; }
+    .box { margin-top: 16px; padding: 12px; border: 1px solid #ccc; border-radius: 10px; white-space: pre-wrap; }
+    #result { font-size: 18px; }
+  </style>
+</head>
+<body>
+  <h1>おみくじ</h1>
+  <div id="status">初期化中…</div>
+  <button id="draw" disabled>引く</button>
+  <div class="box" id="result" style="display:none;"></div>
+
+  <script>
+    const LIFF_ID = "YOUR_LIFF_ID_HERE";2008828112 //
+    const omikuji = [
+      { name: "大吉", msg: "最高の一日！今日は追い風(^^♪財布の紐だけ向かい風。。" },
+      { name: "中吉", msg: "安定した幸せの一日！焦らず、でも放置はしないでね" },
+      { name: "小吉", msg: "小さな幸せにも感謝！積み上げが効くよ" },
+      { name: "吉",   msg: "平和がいちばん！淡々と勝つ！！" },
+      { name: "末吉", msg: "午後から伸びる！午前に諦めると損かも、、、" },
+      { name: "凶",   msg: "うぅ～ん今日は慎重に！“確認したつもり”が敵になるよ" }
+    ];
+
+    async function main() {
+      try {
+        await liff.init({ liffId: LIFF_ID });
+        document.getElementById("status").textContent = "準備OK";
+        document.getElementById("draw").disabled = false;
+      } catch (e) {
+        document.getElementById("status").textContent = "初期化失敗: " + e.message;
+      }
+    }
+
+    document.getElementById("draw").addEventListener("click", () => {
+      const r = omikuji[Math.floor(Math.random() * omikuji.length)];
+      const text = `【${r.name}】\n${r.msg}`;
+      const el = document.getElementById("result");
+      el.style.display = "block";
+      el.textContent = text;
+    });
+
+    main();
+  </script>
+</body>
+</html>
